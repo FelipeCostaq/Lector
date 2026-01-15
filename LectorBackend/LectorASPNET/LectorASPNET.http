@@ -1,0 +1,6 @@
+@LectorASPNET_HostAddress = http://localhost:5290
+
+GET {{LectorASPNET_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
