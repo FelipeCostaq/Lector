@@ -2,45 +2,17 @@
 {
     public class Review
     {
-        public int Id
-        {
-            get; set;
-        }
+        public int Id { get; set; }
+        public string BookId { get; set; } = string.Empty;
+        public string BookTitle { get; set; } = string.Empty;
+        public string? BookCoverUrl { get; set; }
 
-        // Dados do Livro (Cache para evitar chamar API toda hora)
-        public string LivroIdApi
-        {
-            get; set;
-        } // ID do Google Books
-        public string TituloLivro
-        {
-            get; set;
-        }
-        public string? CapaUrl
-        {
-            get; set;
-        }
+        public double Rating { get; set; } 
+        public string? ReviewText { get; set; } 
+    
+        public DateTime PublicationDate { get; set; } = DateTime.UtcNow;
 
-        // A avaliação
-        public double Nota
-        {
-            get; set;
-        } // Double aceita 4.5, 3.8, etc.
-        public string? TextoResenha
-        {
-            get; set;
-        } // Pode ser nulo se ele só der estrelas
-
-        public DateTime DataPublicacao { get; set; } = DateTime.UtcNow;
-
-        // Dono da avaliação
-        public Guid UsuarioId
-        {
-            get; set;
-        }
-        public Usuario Usuario
-        {
-            get; set;
-        }
+        public Guid UserId { get; set; }
+        public User User { get; set; }
     }
 }
