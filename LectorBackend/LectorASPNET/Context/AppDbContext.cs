@@ -7,10 +7,7 @@ namespace LectorASPNET.Data
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-        public DbSet<User> Users
-        {
-            get; set;
-        }
+        public DbSet<User> Users { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<UserLibrary> UserLibraries { get; set; }
         public DbSet<Social> Socials { get; set; }
@@ -18,6 +15,17 @@ namespace LectorASPNET.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.AuthId)
+                .IsUnique();
+
+            modelBuilder.Entity<UserLibrary>()
+                .Property(u => u.Status)
+                .HasConversion<string>();
+
+            modelBuilder.Entity<UserLibrary>()
+                .HasIndex(u => u.BookId);
 
             modelBuilder.Entity<Social>()
                 .HasKey(s => new { s.FollowerId, s.FollowingId }); 
@@ -36,7 +44,10 @@ namespace LectorASPNET.Data
 
             modelBuilder.Entity<Review>()
                 .Property(r => r.Rating)
-                .HasColumnType("double precision"); 
+                .HasColumnType("double precision");
+
+            modelBuilder.Entity<Review>()
+                .HasIndex(r => r.BookId);
         }
     }
 }
