@@ -38,18 +38,21 @@ builder.Services.AddAuthentication(options =>
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 })
+
 .AddJwtBearer(options =>
 {
+    options.MetadataAddress = $"{supabaseUrl}/auth/v1/.well-known/openid-configuration";
+
     options.TokenValidationParameters = new TokenValidationParameters
     {
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret)),
         ValidateIssuer = true,
         ValidIssuer = $"{supabaseUrl}/auth/v1",
+
         ValidateAudience = true,
         ValidAudience = "authenticated",
+
         ValidateLifetime = true,
-        ClockSkew = TimeSpan.Zero
+        ClockSkew = TimeSpan.Zero,
     };
 });
 
@@ -85,6 +88,8 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
+
+builder.Services.AddHttpClient<LectorASPNET.Services.GoogleBooksService>();
 
 var app = builder.Build();
 
