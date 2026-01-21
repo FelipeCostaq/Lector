@@ -14,8 +14,18 @@ var jwtSecret = Environment.GetEnvironmentVariable("JWT_SECRET")
     ?? throw new InvalidOperationException("JWT_SECRET ausente");
 var supabaseUrl = Environment.GetEnvironmentVariable("SUPABASE_URL")
     ?? throw new InvalidOperationException("SUPABASE_URL ausente");
+var supabaseKey = Environment.GetEnvironmentVariable("SUPABASE_KEY")
+    ?? throw new InvalidOperationException("SUPABASE_KEY ausente no .env");
 var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL")
     ?? throw new InvalidOperationException("DATABASE_URL ausente");
+
+builder.Services.AddScoped<Supabase.Client>(_ =>
+    new Supabase.Client(supabaseUrl, supabaseKey, new Supabase.SupabaseOptions
+    {
+        AutoRefreshToken = true,
+        AutoConnectRealtime = false
+    }
+));
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
@@ -84,7 +94,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// app.UseHttpsRedirection(); 
+app.UseHttpsRedirection(); 
 
 app.UseAuthentication();
 app.UseAuthorization();
